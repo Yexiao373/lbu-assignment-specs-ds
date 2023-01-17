@@ -4,83 +4,89 @@
 
 ### The Problem
 
-Many organisations are concerned about the security of passwords used for
-access to their systems. Users tend to choose passwords that are easy to remember and therefore often
-dictionary words. These passwords are easy to crack using simple methods. Requiring users to use a mix of
-upper and lower case, special characters, and so on, is better but results in passwords that are difficult
-to remember. Users resort to tactics such as always having the upper case character first, which defeats the
-object and can make passwords easier to crack.
+Many businesses offer their products with a "list price", and then apply various discounts to certain types of
+customer. A large pizza chain is rarely able to charge full price for a pizza, for example. And very few customers
+are willing to pay the full price.
 
-A better strategy to ensure users choose (and, importantly, can remember) more complex, longer, passwords
-is needed. A good approach, which ticks all the requirements, is to chain together three random
-words - the resulting password is easy to remember, long, and challenging to crack using brute force methods.
+This means that the web sites of such businesses have to carry out calculations that takes what the customer has
+ordered to arrive at a final price.
 
 ### The Task
 
-Write a program that generates a password consisting of three random words joined together. The words 
-can be drawn from a list (or lists) declared as ``CONSTANTS`` in the program. The number of possible 
-passwords that can be generated should be at least 500 (which is obviously not enough, but will do for now).
+A certain pizza takeaway offers any of its pizzas for a fixed price. All pizzas cost the same, regardless of recipe.
+For every pizza ordered, a customer may order another for half price. In addition, if the total order is over £50 (after
+the "half price" discount), a whopping 35% discount is applied to the total. 
 
-Your program could be used to generate random passwords for, say, a new group of students. So it should start by
-prompting the user to enter the number of passwords needed, and should then display a list of that many passwords.
-The number should be between 1 and 24 inclusive.
+To be clear, the "half price" offer only applies where a full price pizza has been ordered. So an order of four pizzas
+would be charged at two full price, two half price. A order for five pizzas would be *three* full price, and two half
+price.
 
-You may ignore the (unlikely) possibility that your program will generate the same random password more than 
-once in the provided list.
-
-As a guide, the model solution to this task, laid out as per PEP-8 is 52 lines long. About 22 of these lines are
-definitions of the wordlists.
+Your task is to write a program that takes the current price of a single pizza, finds how many the customer has
+ordered, and applies any relevant discounts.
 
 ### Examples
 
-The following illustrate what should happen when the program executes in a variety of situations. This version
-of the program is taking the three words from three different lists, the aim being to show how it works, and also to 
-produce hopefully more memorable passwords. There is no need for your program to follow these scheme.
+The following illustrate what should happen when the program executes in a variety of situations. 
 
-Here, the program generates a short list of passwords:
+Here, two pizzas just score the "half price" offer.
 
 ```text
-Password Generator
-==================
+Beckett Pizza Plaza
+===================
 
-How many passwords are needed?: 6
+Enter today's pizza price: 10
+Enter number of pizzas on the order: 2
 
-  1 --> boredtealcamel
-  2 --> livelygraygorilla
-  3 --> willingorangesnake
-  4 --> impressivetealgorilla
-  5 --> crankynavygorilla
-  6 --> calmtealgorilla
+Total Cost: £15.00.
 ```
 
-It is important to check boundary conditions, so we see that the program will generate just one password ...
+Here there is an odd number of pizzas, so two are full price, and one is half price.
 
 ```text
-Password Generator
-==================
+Beckett Pizza Plaza
+===================
 
-How many passwords are needed?: 1
+Enter today's pizza price: 10
+Enter number of pizzas on the order: 3
 
-  1 --> glumbluekangaroo
+Total Cost: £25.00.
 ```
 
-... but it behaves sensibly if asked to generate a number that is out of the allowed range:
+This large order (on a more expensive day) causes the big 35% discount to kick in. The calculation will have been
+three pizzas at £15, three half price at £7.50 to give a total of £67.50. This is discounted to £43.875, which is
+displayed as shown.
 
 ```text
-Password Generator
-==================
+Beckett Pizza Plaza
+===================
 
-How many passwords are needed?: 0
-Please enter a value between 1 and 24.
+Enter today's pizza price: 15
+Enter number of pizzas on the order: 6
+
+Total Cost: £43.88.
 ```
 
-Finally, it also behaves sensibly if the user enters a wildly incorrect value:
+A good solution should also handle incorrect input. It is not necessary to provide an exact error message, but
+here are some sample error cases to consider. There are probably more.
 
 ```text
-Password Generator
-==================
+Beckett Pizza Plaza
+===================
 
-How many passwords are needed?: cheese
-Please enter a number.
+Enter today's pizza price: 0
+Invalid Input.
+
+Beckett Pizza Plaza
+===================
+
+Enter today's pizza price: 5
+Enter number of pizzas on the order: 0
+Invalid Input.
+
+Beckett Pizza Plaza
+===================
+
+Enter today's pizza price: 5
+Enter number of pizzas on the order: -1
+Invalid Input.
 ```
-

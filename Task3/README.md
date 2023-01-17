@@ -4,78 +4,157 @@
 
 ### The Problem
 
-The University of Poppleton enrols many new students at the start of each academic year. One part of this process
-involves creating email accounts for every new student. The format of these email addresses follows a particular
-pattern, but creating them is a tedious process.
+The University of Poppleton has a number of buildings which are used for various activities. It is important to
+track which members of staff are in each building at any point in time. A list could be crucial in the event of a
+fire, for example.
 
-A program is required that will read a list of UCAS numbers (which will become student ID numbers) and corresponding
-student names and generate a corresponding list of student emails to be created. Both lists are stored in 
-text files.
+To this end, every staff member has a card which they are required to swipe when they enter or leave a building. By
+analysing the data thus generated it should be possible to determine which members of staff are currently in which
+building.
+
+A prototype system has been installed in Poppleton Hall (on Poppleton Campus), and it requires some software.
 
 ### The Task
 
-You should create a program that processes a file containing a list of student IDs and names, and produces a second
-file containing the student IDs and the email address that should be created.
-
-The names and IDs of new students are received in a file. It looks like this:
+There will need to be two input to this software. The first will be a list of staff members along with their
+ID number. The ID number is recorded by the device on each door when a card is "swiped". This file is of arbitrary
+length, and looks like this:
 
 ```text
-c7090763 Velez, Hyun
-c6542898 Salsbury, Debra Mary Adele
-c9510348 Molina, Arianne Brittney
-c5374186 Sampson, Lester
+2799 Mr Jeffrey Cardona
+2315 Miss Dawn Walker
+2027 Mrs Michelle Kelty
+1469 Mr Dennis Henderson
+7943 Prof Emily Booth
+1570 Dr John Scott
+7686 Dr Lois Judd
+2986 Miss Helen Obrien
+3345 Ms Irene Destefano
+4212 Miss Nichole Lipner
+7260 Prof Denise Borst
+9386 Prof Dolores Coney
 ```
 
-The first part is the student ID (at Poppleton that is always the same length). The rest of the line is the student's
-name, with family name separated from forenames by a comma. As shown, and as in real life, students have different 
-numbers of forenames.
+The second input file consists of data generated from each "swipe". There are three doors in the Hall, and the file
+shows which door was accessed, and by which card. It is also of arbitrary length, but a small fragment might be:
 
-The first part of a student's email consists of their initials, separated by dots, their surname, and four random 
-digits (this last is to ensure that all students get unique emails). If a surname contains any non-alphabetic
-character (as in "Fink-Nottle", "De Gea", or "O'Mahoney"), those characters are removed.
-
-The second part is the University's domain, which is the same for all students. The result is rendered all in 
-lower case. So the above students would be given the following emails (once the domain has been added in):
-
-```text 
-c7090763 h.velez6435@poppleton.ac.uk
-c6542898 d.m.a.salsbury5250@poppleton.ac.uk
-c9510348 a.b.molina2382@poppleton.ac.uk
-c5374186 l.sampson3346@poppleton.ac.uk
+```text
+2799 1
+2315 2
+1469 2
+2799 2
 ```
 
-Your program should take a file in the first format, and produce a file in the second. It is safe to assume that
-every line in the first file is formatted exactly as expected.
+It is assumed that initially the building is empty. So, looking at the staff file, we can see that this data reveals 
+that Mr Cardona used Door 1 to enter the building, then Miss Walker used Door 2, and Mr Henderson also used Door 2. 
+Therefore, after the third line all three are currently in the building. The final line above reveals that Mr Cardona 
+then used Door 2; as he was in the building, he must have left, so only the other two remain in the building.
 
-You may ignore the (very remote) possibility of the program generating the same email for two different
-students.
+The software should read a staff list and a list of door accesses. After each access it should display the number
+of staff in the building, along with their names. Some example output is below. Both files are provided as
+command-line arguments.
 
-Hints:
-* The student ID is always at the start of the line and is always the same length. That helps.
-* There is only one comma on each line. Taking this with the above observation makes finding the surname easy.
-* The initials are the only uppercase letters after the only comma on the line.
-* List comprehensions really are your friend in this exercise.
-
-As a guide, the model solution to this task, laid out as per PEP-8 is about 50 lines long. It contains many list
-comprehensions.
+The software should end by printing the final list of staff in the building.
 
 ### Examples
 
-Examples of the correct results are above.
+The following illustrate what should happen when the program executes in a variety of situations. 
 
-Remember that the student data is stored in a file, and the output is written to another file. The name of
-the first file is provided as a command-line argument. The program should therefore behave sensibly if the
-file cannot be opened or if the CLA is missing.
-
+Here is a small staff list. It is very short to make tracing events easier.
 ```text
-$ py email_generator.py 
-Error: Missing command-line argument.
-
-$ py email_generator.py missing.txt
-Error: Cannot open "missing.txt". Sorry about that.
-
+5094 Prof Joannie Longwell
+7822 Prof Debra Ziegler
+5373 Mr Ronald Mistretta
+8962 Prof Roderick Jones
+1985 Miss Elissa Robinson
 ```
 
-If the program works correctly there should be no output to the screen.
+and here is some sample door data for the same staff members:
 
+```text
+5373 3
+5094 2
+1985 1
+1985 2
+8962 1
+5373 1
+5373 2
+8962 1
+5094 3
+1985 2
+7822 3
+1985 3
+```
 
+So, taking Miss Robinson (ID 1985) as an example. we can see that she entered via Door 1 (line 3), left via Door 2 (line
+4), and then later returned via Door 2 before leaving finally via Door 3. This, and much else, is apparent in 
+the output:
+
+```text
+$ python3 popleton_hall.py staff.txt doors.txt                                                                                                                                  [12:29:36]
+Door Activation 1
+Mr Ronald Mistretta accessed Door 3.
+Mr Ronald Mistretta has entered the building.
+In [1]: Mr Ronald Mistretta.
+
+Door Activation 2
+Prof Joannie Longwell accessed Door 2.
+Prof Joannie Longwell has entered the building.
+In [2]: Mr Ronald Mistretta, Prof Joannie Longwell.
+
+Door Activation 3
+Miss Elissa Robinson accessed Door 1.
+Miss Elissa Robinson has entered the building.
+In [3]: Mr Ronald Mistretta, Prof Joannie Longwell, Miss Elissa Robinson.
+
+Door Activation 4
+Miss Elissa Robinson accessed Door 2.
+Miss Elissa Robinson has left the building.
+In [2]: Mr Ronald Mistretta, Prof Joannie Longwell.
+
+Door Activation 5
+Prof Roderick Jones accessed Door 1.
+Prof Roderick Jones has entered the building.
+In [3]: Mr Ronald Mistretta, Prof Joannie Longwell, Prof Roderick Jones.
+
+Door Activation 6
+Mr Ronald Mistretta accessed Door 1.
+Mr Ronald Mistretta has left the building.
+In [2]: Prof Joannie Longwell, Prof Roderick Jones.
+
+Door Activation 7
+Mr Ronald Mistretta accessed Door 2.
+Mr Ronald Mistretta has entered the building.
+In [3]: Prof Joannie Longwell, Prof Roderick Jones, Mr Ronald Mistretta.
+
+Door Activation 8
+Prof Roderick Jones accessed Door 1.
+Prof Roderick Jones has left the building.
+In [2]: Prof Joannie Longwell, Mr Ronald Mistretta.
+
+Door Activation 9
+Prof Joannie Longwell accessed Door 3.
+Prof Joannie Longwell has left the building.
+In [1]: Mr Ronald Mistretta.
+
+Door Activation 10
+Miss Elissa Robinson accessed Door 2.
+Miss Elissa Robinson has entered the building.
+In [2]: Mr Ronald Mistretta, Miss Elissa Robinson.
+
+Door Activation 11
+Prof Debra Ziegler accessed Door 3.
+Prof Debra Ziegler has entered the building.
+In [3]: Mr Ronald Mistretta, Miss Elissa Robinson, Prof Debra Ziegler.
+
+Door Activation 12
+Miss Elissa Robinson accessed Door 3.
+Miss Elissa Robinson has left the building.
+In [2]: Mr Ronald Mistretta, Prof Debra Ziegler.
+
+Final Status
+In [2]: Mr Ronald Mistretta, Prof Debra Ziegler.
+```
+
+The program should also exit gracefully in error cases such as missing or incorrectly formatted files. There is no
+need for the error messages generated to say exactly what is awry.
