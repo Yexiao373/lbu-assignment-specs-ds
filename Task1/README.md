@@ -13,7 +13,8 @@ ordered to arrive at a final price.
 
 ### The Task
 
-A certain pizza takeaway offers any of its pizzas for a fixed price. All pizzas cost the same, regardless of recipe.
+A certain pizza takeaway offers any of its pizzas for a fixed price. The price can be changed every day. 
+All pizzas cost the same, regardless of recipe.
 For every pizza ordered, a customer may order another for half price. In addition, if the total order is over £50 (after
 the "half price" discount), a whopping 35% discount is applied to the total. 
 
@@ -53,7 +54,7 @@ Total Cost: £25.00.
 ```
 
 This large order (on a more expensive day) causes the big 35% discount to kick in. The calculation will have been
-three pizzas at £15, three half price at £7.50 to give a total of £67.50. This is discounted to £43.875, which is
+three pizzas at £15, and three half price at £7.50 to give a total of £67.50. This is discounted to £43.875, which is
 displayed as shown.
 
 ```text

@@ -30,6 +30,8 @@ The data should be provided in a file, the name of which is supplied as a comman
 taken directly from the camera, so you can assume it is in the correct format. You are provided with a sample file 
 saved by the camera. You can obviously (and easily) devise your own for testing purposes.
 
+_Your solution should be written using only standard Python. You may obviously use standard library modules._
+
 ### Examples
 
 The following illustrate what should happen when the program executes in a variety of situations. 
@@ -53,7 +55,8 @@ The program should take the name of the file on the command-line, and the displa
 they should be something like:
 
 ```text
-$ python3 speed_camera.py camera_data.txt                                                                                                                                       [11:10:27]
+$ python3 speed_camera.py camera_data.txt
+
 Speed Camera Data Analytics
 ===========================
 
@@ -74,13 +77,13 @@ Speeder Percent:   30.00
 Obviously the program needs to exit gracefully if the input file (as provided on the command line) is not found:
 
 ```text
-$ python3 speed_camera.py camera_data_missing.txt                                                                                                                               [11:13:47]
+$ python3 speed_camera.py camera_data_missing.txt                                                                                   
 speed_camera.py: Cannot open "camera_data_missing.txt"
 ```
 
 and also if the command-line argument is missing completely:
 
 ```text
-$ python3 speed_camera.py                                                                                                                                                       [11:14:19]
+$ python3 speed_camera.py                                       
 speed_camera.py: no file name given for processing
 ```

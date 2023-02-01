@@ -25,11 +25,11 @@ _pip_ and _Virtual Environments_ help programmers work with these.
 There are YouTube videos a-plenty, and copious online docs to help you.
 
 Pandas is in the Cheese Shop here - https://pypi.org/project/pandas/ - and
-also maintains its own web presence here - https://pypi.org/project/pandas/ . There
-is a useful tutorial and sample data set on the latter.
+also maintains its own web presence here - https://pandas.pydata.org/ . There
+is a useful "Getting Started" tutorial and sample data set on the latter.
 
 Your task is to use Pandas in conjunction with some freely available
-data (such as that found on Kaggle (https://www.kaggle.com)) to 
+data (such as that found on Kaggle (https://www.kaggle.com/)) to 
 **do some Data Science**.
 
 The only rules are:

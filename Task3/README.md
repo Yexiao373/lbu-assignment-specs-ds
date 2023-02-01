@@ -4,7 +4,8 @@
 
 ### The Problem
 
-The University of Poppleton has a number of buildings which are used for various activities. It is important to
+The University of Poppleton has a number of buildings which are used for various activities. For safety
+reasons it is important to
 track which members of staff are in each building at any point in time. A list could be crucial in the event of a
 fire, for example.
 
@@ -16,9 +17,9 @@ A prototype system has been installed in Poppleton Hall (on Poppleton Campus), a
 
 ### The Task
 
-There will need to be two input to this software. The first will be a list of staff members along with their
-ID number. The ID number is recorded by the device on each door when a card is "swiped". This file is of arbitrary
-length, and looks like this:
+There will need to be two inputs to this software. The first will be a list of staff members along with their
+ID number. The ID number is recorded by the device on each door when a card is "swiped", and is a unique four
+digit integer. This file is of arbitrary length, and looks like this:
 
 ```text
 2799 Mr Jeffrey Cardona
@@ -51,14 +52,13 @@ Therefore, after the third line all three are currently in the building. The fin
 then used Door 2; as he was in the building, he must have left, so only the other two remain in the building.
 
 The software should read a staff list and a list of door accesses. After each access it should display the number
-of staff in the building, along with their names. Some example output is below. Both files are provided as
+of staff in the building, along with their names. To assist in commissioning the software it should also display
+which door has been accessed and by whom. Some example output is below. The names of both files are provided as
 command-line arguments.
 
 The software should end by printing the final list of staff in the building.
 
 ### Examples
-
-The following illustrate what should happen when the program executes in a variety of situations. 
 
 Here is a small staff list. It is very short to make tracing events easier.
 ```text
@@ -87,11 +87,12 @@ and here is some sample door data for the same staff members:
 ```
 
 So, taking Miss Robinson (ID 1985) as an example. we can see that she entered via Door 1 (line 3), left via Door 2 (line
-4), and then later returned via Door 2 before leaving finally via Door 3. This, and much else, is apparent in 
+4), and then later returned via Door 2 before leaving finally via Door 3. She is therefore not in the building at the end 
+of this run. This, and much else, is apparent in 
 the output:
 
 ```text
-$ python3 popleton_hall.py staff.txt doors.txt                                                                                                                                  [12:29:36]
+$ python3 poppleton_hall.py staff.txt doors.txt            
 Door Activation 1
 Mr Ronald Mistretta accessed Door 3.
 Mr Ronald Mistretta has entered the building.
