@@ -43,6 +43,8 @@ Remember that the highest wind speed may have been observed more than once, and 
 
 You can assume that the file contains at least one reading for each location, and at least one for each storm. (This observation is actually a good place to start).
 
+There may well be duplicate readings, caused by volunteers taking readings at the same location at similar times. There is no need to worry about this (but the duplicates should all count towards the statistics).
+
 ### Examples
 
 The following illustrate what should happen when the program executes in a variety of situations. 
