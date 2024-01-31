@@ -4,158 +4,104 @@
 
 ### The Problem
 
-The University of Poppleton has a number of buildings which are used for various activities. For safety
-reasons it is important to
-track which members of staff are in each building at any point in time. A list could be crucial in the event of a
-fire, for example.
+For better or worse, most access to computer systems is still reliant on passwords. Various mechanisms exist to manage keeping records of users, their passwords, and the associated permissions. On traditional Unix systems the basic information (username, real name, password, etc) is stored in a plain text file usually  called ``/etc/passwd``. Some other systems use a small database.
 
-To this end, every staff member has a card which they are required to swipe when they enter or leave a building. By
-analysing the data thus generated it should be possible to determine which members of staff are currently in which
-building.
+Three command-line programs are used in the Unix world to maintain password information.
 
-A prototype system has been installed in Poppleton Hall (on Poppleton Campus), and it requires some software.
+* ``adduser`` creates a new user, in the form of a new entry in the password file.
+* ``deluser`` does the opposite, by removing the entry from the password file.
+* ``passwd`` allows a user to change their password.
+
+When a user attempts to access a system, the username and password they provide are checked against this file. This is done with a program called ``login``.
+
+This task involves developing implementations of each of these programs.
 
 ### The Task
 
-There will need to be two inputs to this software. The first will be a list of staff members along with their
-ID number. The ID number is recorded by the device on each door when a card is "swiped", and is a unique four
-digit integer. This file is of arbitrary length, and looks like this:
+Your task is to implement the four commands above, together with another utility that will list all the current users in some neat format. 
 
-```text
-2799 Mr Jeffrey Cardona
-2315 Miss Dawn Walker
-2027 Mrs Michelle Kelty
-1469 Mr Dennis Henderson
-7943 Prof Emily Booth
-1570 Dr John Scott
-7686 Dr Lois Judd
-2986 Miss Helen Obrien
-3345 Ms Irene Destefano
-4212 Miss Nichole Lipner
-7260 Prof Denise Borst
-9386 Prof Dolores Coney
-```
+You will provide implementations that will work for a small embedded database. The database system to use is SQLite, an interface to which is provided as part of the Python Standard Library. Obviously your first task is to research into how SQLite databases can be accessed from Python.
 
-The second input file consists of data generated from each "swipe". There are three doors in the Hall, and the file
-shows which door was accessed, and by which card. It is also of arbitrary length, but a small fragment might be:
+A sample script is included in this folder of the repo. It creates the database table that you should use. Note that an SQLite database is a single file, and that this script will create it should it not exist.
 
-```text
-2799 1
-2315 2
-1469 2
-2799 2
-```
+Your programs should work as follows:
 
-It is assumed that initially the building is empty. So, looking at the staff file, we can see that this data reveals 
-that Mr Cardona used Door 1 to enter the building, then Miss Walker used Door 2, and Mr Henderson also used Door 2. 
-Therefore, after the third line all three are currently in the building. The final line above reveals that Mr Cardona 
-then used Door 2; as he was in the building, he must have left, so only the other two remain in the building.
+<dl>
+<dt>adduser</dt>
+<dd>Adds a new entry to the database. The user should enter the desired username, the real name, and the password. If the username already exists, an error should be shown and no change should be made. It is fine for several users to have the same real name, or even the same password.</dd>
 
-The software should read a staff list and a list of door accesses. After each access it should display the number
-of staff in the building, along with their names. To assist in commissioning the software it should also display
-which door has been accessed and by whom. Some example output is below. The names of both files are provided as
-command-line arguments.
+<dt>deluser</dt>
+<dd>Removes an entry from the database. This should be based on the username, which is known to be unique. If the user is not found, the program should display a message to say nothing was changed.</dd>
 
-The software should end by printing the final list of staff in the building.
+<dt>passwd</dt>
+<dd>Changes a user's password. The user should enter their username, and their new password. As is customary, for verification, the user should first enter their current password, and then the new password should be entered twice. No password should appear on the screen as it is typed. If the username is not found, the current password is invalid, or the passwords do not match, no change to the file should be made.</dd>
+</dl>
+
+The password itself should be stored in some encrypted form. Anything is fine, even a simple substitution or trivial obfuscation. There are no extra marks for doing something more complicated!
+
+Your fourth program should be a simple "login" where the user enters a username and password, and the program reports whether or not they would be allowed to access the system. The password should not be displayed as it is typed, but you may want to print it out for testing purposes.
+
+The final program should display a list of all current users. Any neat format is fine.
+
+In all these programs it is fine to hard-code the name of the database. This will be needed by several of the programs, but you should still store it in only one place.
+
+Likewise, it is quite possible that one or more of your programs could require the same functions. Such code should **not** be duplicated in multiple programs. (Most likely, a well designed solution will contain one module with many functions, and four quite short programs that use these.)
+
+The files you will be working with are quite small, so there is no need to be too concerned about the efficiency of your solution. Certainly you should assume that the whole file can be held in memory without any performance hit.
+
+*In completing the tasks above you may use any module from the Python Standard Library that you find will help. Indeed, it will be very difficult to achieve good results without doing so! You may use a package from PyPi to format the table output if you want.*
+
+*If you want to use serious encryption for passwords, you are welcome to use something like the ``cryptography`` module from PyPi, but there is no need to do so. Nor are there any extra marks for doing so. If you do use any modules from PyPi you should use a Virtual Environment (which should obviously not be in your repo), and include in your repo a clear statement of what you have used (the usual ``requirements.txt``) file is fine.*
 
 ### Examples
 
-Here is a small staff list. It is very short to make tracing events easier.
-```text
-5094 Prof Joannie Longwell
-7822 Prof Debra Ziegler
-5373 Mr Ronald Mistretta
-8962 Prof Roderick Jones
-1985 Miss Elissa Robinson
-```
+Since we are dealing with a database, it is difficult to provide examples that show all the possibilities. Here are some examples.
 
-and here is some sample door data for the same staff members:
+After creation, the database is empty:
 
 ```text
-5373 3
-5094 2
-1985 1
-1985 2
-8962 1
-5373 1
-5373 2
-8962 1
-5094 3
-1985 2
-7822 3
-1985 3
+$ python3 allusers.py
+No users in the database!
 ```
 
-So, taking Miss Robinson (ID 1985) as an example. we can see that she entered via Door 1 (line 3), left via Door 2 (line
-4), and then later returned via Door 2 before leaving finally via Door 3. She is therefore not in the building at the end 
-of this run. This, and much else, is apparent in 
-the output:
+Adding a user makes an entry in the database:
 
 ```text
-$ python3 poppleton_hall.py staff.txt doors.txt            
-Door Activation 1
-Mr Ronald Mistretta accessed Door 3.
-Mr Ronald Mistretta has entered the building.
-In [1]: Mr Ronald Mistretta.
+$ python3 adduser.py
+Enter username: alan
+Real Name: Alan Turing
+Password: 
+Admin? (y/n): y
 
-Door Activation 2
-Prof Joannie Longwell accessed Door 2.
-Prof Joannie Longwell has entered the building.
-In [2]: Mr Ronald Mistretta, Prof Joannie Longwell.
-
-Door Activation 3
-Miss Elissa Robinson accessed Door 1.
-Miss Elissa Robinson has entered the building.
-In [3]: Mr Ronald Mistretta, Prof Joannie Longwell, Miss Elissa Robinson.
-
-Door Activation 4
-Miss Elissa Robinson accessed Door 2.
-Miss Elissa Robinson has left the building.
-In [2]: Mr Ronald Mistretta, Prof Joannie Longwell.
-
-Door Activation 5
-Prof Roderick Jones accessed Door 1.
-Prof Roderick Jones has entered the building.
-In [3]: Mr Ronald Mistretta, Prof Joannie Longwell, Prof Roderick Jones.
-
-Door Activation 6
-Mr Ronald Mistretta accessed Door 1.
-Mr Ronald Mistretta has left the building.
-In [2]: Prof Joannie Longwell, Prof Roderick Jones.
-
-Door Activation 7
-Mr Ronald Mistretta accessed Door 2.
-Mr Ronald Mistretta has entered the building.
-In [3]: Prof Joannie Longwell, Prof Roderick Jones, Mr Ronald Mistretta.
-
-Door Activation 8
-Prof Roderick Jones accessed Door 1.
-Prof Roderick Jones has left the building.
-In [2]: Prof Joannie Longwell, Mr Ronald Mistretta.
-
-Door Activation 9
-Prof Joannie Longwell accessed Door 3.
-Prof Joannie Longwell has left the building.
-In [1]: Mr Ronald Mistretta.
-
-Door Activation 10
-Miss Elissa Robinson accessed Door 2.
-Miss Elissa Robinson has entered the building.
-In [2]: Mr Ronald Mistretta, Miss Elissa Robinson.
-
-Door Activation 11
-Prof Debra Ziegler accessed Door 3.
-Prof Debra Ziegler has entered the building.
-In [3]: Mr Ronald Mistretta, Miss Elissa Robinson, Prof Debra Ziegler.
-
-Door Activation 12
-Miss Elissa Robinson accessed Door 3.
-Miss Elissa Robinson has left the building.
-In [2]: Mr Ronald Mistretta, Prof Debra Ziegler.
-
-Final Status
-In [2]: Mr Ronald Mistretta, Prof Debra Ziegler.
+$ python3 allusers.py
++-------+------------+-------------+------------+---------+
+|   uid | Username   | Name        | Password   | Admin   |
++=======+============+=============+============+=========+
+|     1 | alan       | Alan Turing | #####      | Yes     |
++-------+------------+-------------+------------+---------+
 ```
 
-The program should also exit gracefully in error cases such as missing or incorrectly formatted files. There is no
-need for the error messages generated to say exactly what is awry.
+Note that the password is not displayed in the listing. It has been encrypted in the database. The user can now login with the correct password:
+
+```text
+$ python3 login.py
+Enter username: alan
+Password: 
+Access Granted
+```
+
+Other users cannot, and nor can the single user if he gets the password wrong. (The specific errors are not great practice here, but it is useful for debugging.) Note that passwords are not displayed.
+
+```text
+$ python3 login.py
+Enter username: linus
+Unknown User
+
+$ python3 login.py
+Enter username: alan
+Password: 
+Access Denied
+
+```
+
+A video showing other possibilities will be added to MyBeckett.

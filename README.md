@@ -7,8 +7,8 @@ Your programs should be stored in your GitHub repo, along with your weekly work,
 For full details of the assessment refer to the specification on MyBeckett.
 
 Some folders contain files that may be useful, viz:
-* Task2 contains three sample input files.
-* Task3 contains a script that can be used to create the require SQLite database.
+* Task2 contains a sample input file.
+* Task3 contains a (somewhat crufty) script that can be used to create the require SQLite database.
 
 **This is the version for the second semester module, for Data Science
 students.**
