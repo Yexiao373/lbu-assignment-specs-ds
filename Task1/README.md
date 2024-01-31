@@ -4,90 +4,82 @@
 
 ### The Problem
 
-Many businesses offer their products with a "list price", and then apply various discounts to certain types of
-customer. A large pizza chain is rarely able to charge full price for a pizza, for example. And very few customers
-are willing to pay the full price.
+Pizza takeaways are popular. There is a wide variety from which to choose, ranging from international franchises to small local businesses.
 
-This means that the web sites of such businesses have to carry out calculations that takes what the customer has
-ordered to arrive at a final price.
+For reasons that are not clear, the pricing of takeaway pizzas is very rarely straightforward. Prices vary depending on many factors. These might include the number ordered, the time of day the order is placed, the day of the week itself, whether the order will be collected, or even whether an app was used to place the order.
+
+A computer program is often the only practical way to work out the price of a takeaway pizza order.
 
 ### The Task
 
-A certain pizza takeaway offers any of its pizzas for a fixed price. The price can be changed every day. 
-All pizzas cost the same, regardless of recipe.
-For every pizza ordered, a customer may order another for half price. In addition, if the total order is over £50 (after
-the "half price" discount), a whopping 35% discount is applied to the total. 
+In this task you will develop a program that will assist one Pizza Provider to calculate how much to charge a customer for a given order. The rules to be applied are set out below.
 
-To be clear, the "half price" offer only applies where a full price pizza has been ordered. So an order of four pizzas
-would be charged at two full price, two half price. A order for five pizzas would be *three* full price, and two half
-price.
+Beckett Pizza Plaza (henceforth *BPP*) offers a range of pizzas for collection or delivery. In common with all others in the marketplace, the pricing of individual pizzas is simple, but things become more complex with a complete order. In an attempt to simpify this needlessly complex state of affairs, BPP has decided to offer only one discount.
 
-Your task is to write a program that takes the current price of a single pizza, finds how many the customer has
-ordered, and applies any relevant discounts.
+*The customer must order FOUR pizzas. The pizzas are priced differently, but the cheapest will not be charged for.*
+
+This would commonly be called a "Four-for-Three" offer.
+
+Your task is to create a program that accepts four pizza prices, and carries out the required calculation to determine what the customer should be charged. The program should also display the discount the customer has achieved (which is at most 25%).
 
 ### Examples
 
 The following illustrate what should happen when the program executes in a variety of situations. 
 
-Here, two pizzas just score the "half price" offer.
+Here, four pizzas have the same price, so the total is three times the price, and the discount is 25%.
 
 ```text
-Beckett Pizza Plaza
-===================
+Beckett Pizza Plaza 4-for-3 Offer
+=================================
 
-Enter today's pizza price: 10
-Enter number of pizzas on the order: 2
+Enter Price of Pizza #1: 12
+Enter Price of Pizza #2: 12
+Enter Price of Pizza #3: 12
+Enter Price of Pizza #4: 12
 
-Total Cost: £15.00.
+Order Total is £36.00, a fabulous discount of 25%!
 ```
 
-Here there is an odd number of pizzas, so two are full price, and one is half price.
+Now, one of the pizzas is cheaper, so this is the "free" one. The discount is slightly less.
 
 ```text
-Beckett Pizza Plaza
-===================
+Beckett Pizza Plaza 4-for-3 Offer
+=================================
 
-Enter today's pizza price: 10
-Enter number of pizzas on the order: 3
+Enter Price of Pizza #1: 12
+Enter Price of Pizza #2: 12
+Enter Price of Pizza #3: 12
+Enter Price of Pizza #4: 11
 
-Total Cost: £25.00.
+Order Total is £36.00, a fabulous discount of 24%!
 ```
 
-This large order (on a more expensive day) causes the big 35% discount to kick in. The calculation will have been
-three pizzas at £15, and three half price at £7.50 to give a total of £67.50. This is discounted to £43.875, which is
-displayed as shown.
+Finally, four differently priced pizzas result in a more complex calculation. (The first three are, obviously, the ones paid for.)
 
 ```text
-Beckett Pizza Plaza
-===================
+Beckett Pizza Plaza 4-for-3 Offer
+=================================
 
-Enter today's pizza price: 15
-Enter number of pizzas on the order: 6
+Enter Price of Pizza #1: 14.99
+Enter Price of Pizza #2: 16.99
+Enter Price of Pizza #3: 15.99
+Enter Price of Pizza #4: 11.00
 
-Total Cost: £43.88.
+Order Total is £47.97, a fabulous discount of 19%!
 ```
 
 A good solution should also handle incorrect input. It is not necessary to provide an exact error message, but
 here are some sample error cases to consider. There are probably more.
 
 ```text
-Beckett Pizza Plaza
-===================
+Beckett Pizza Plaza 4-for-3 Offer
+=================================
 
-Enter today's pizza price: 0
-Invalid Input.
-
-Beckett Pizza Plaza
-===================
-
-Enter today's pizza price: 5
-Enter number of pizzas on the order: 0
-Invalid Input.
-
-Beckett Pizza Plaza
-===================
-
-Enter today's pizza price: 5
-Enter number of pizzas on the order: -1
-Invalid Input.
+Enter Price of Pizza #1: 0
+Please enter a valid price!
+Enter Price of Pizza #1: pepperoni
+Please enter a valid price!
+Enter Price of Pizza #1: 15.99
+Enter Price of Pizza #2: -1.99
+Please enter a valid price!
 ```
