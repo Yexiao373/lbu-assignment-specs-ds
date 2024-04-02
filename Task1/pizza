@@ -1,0 +1,45 @@
+def calculate_pizza_price(num_pizzas, delivery_required, is_tuesday, used_app):
+    # Base pizza price
+    pizza_price = 12.0
+
+    # Apply Tuesday discount
+    if is_tuesday:
+        pizza_price *= 0.5
+
+    # Calculate delivery cost
+    delivery_cost = 0.0
+    if delivery_required:
+        delivery_cost = 2.5 if num_pizzas < 5 else 0.0
+
+    # Calculate total pizza cost
+    total_pizza_cost = num_pizzas * pizza_price
+
+    # Apply app discount
+    if used_app:
+        total_pizza_cost *= 0.75
+
+    # Calculate total order cost
+    total_order_cost = total_pizza_cost + delivery_cost
+
+    return total_order_cost
+
+def main():
+    print("BPP Pizza Price Calculator")
+    print("==========================\n")
+
+    try:
+        num_pizzas = int(input("How many pizzas ordered? "))
+        if num_pizzas <= 0:
+            raise ValueError("Please enter a positive integer!")
+
+        delivery_required = input("Is delivery required? (Y/N): ").strip().lower() == 'y'
+        is_tuesday = input("Is it Tuesday? (Y/N): ").strip().lower() == 'y'
+        used_app = input("Did the customer use the app? (Y/N): ").strip().lower() == 'y'
+
+        total_order_cost = calculate_pizza_price(num_pizzas, delivery_required, is_tuesday, used_app)
+        print(f"\nTotal Price: £{total_order_cost:.2f}.")
+    except ValueError as e:
+        print(e)
+
+if __name__ == "__main__":
+    main()
