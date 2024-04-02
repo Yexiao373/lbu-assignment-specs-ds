@@ -1,0 +1,26 @@
+def read_daily_log(file_path):
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+    # Initialize variables
+    total_time_inside = 0
+    intruder_count = 0
+
+    for line in lines:
+        time_in, time_out, is_intruder = line.strip().split()
+        time_in, time_out = int(time_in), int(time_out)
+
+        # Calculate time spent inside
+        total_time_inside += time_out - time_in
+
+        # Check if it's an intruder
+        if is_intruder == '1':
+            intruder_count += 1
+
+    return total_time_inside, intruder_count
+
+# Example usage
+file_path = "daily_log.txt"
+total_time_inside, intruder_count = read_daily_log(file_path)
+print(f"Total time inside: {total_time_inside} minutes")
+print(f"Number of intruders: {intruder_count}")
